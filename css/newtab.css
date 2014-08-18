@@ -1,7 +1,7 @@
 body {
 	color: #444;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	font-size: 0.8em;
+	font-size: 80%;
 	margin: 0;
 }
 
@@ -25,7 +25,6 @@ body {
 
 .bookmark {
 	background: #fff;
-	box-shadow: 2px 2px 2px #aaa;
 	border-radius: 5px;
 	float: left;
 	height: 100%;

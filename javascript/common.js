@@ -68,7 +68,7 @@ function createDefaults() {
 		show_new_entry: "true",
 		show_options_gear: "true",
 		show_subfolder_icons: "true",
-		thumbnailing_service: "http://api.webthumbnail.org/?width=500&height=400&screen=1280&url=[URL]"
+		thumbnailing_service: "http://www.robothumb.com/src/?size=640x480&url=[URL]"
 	};
 
 	// Creates default localStorage values if they don't already exist
@@ -79,8 +79,8 @@ function createDefaults() {
 	});
 
 	// TODO remove at some point, this will convert everyone to the new thumbnailing API
-	if (localStorage.getItem("thumbnailing_service").indexOf("immediatenet.com") > 0) {
-		localStorage.setItem("thumbnailing_service", "http://api.webthumbnail.org/?width=500&height=400&screen=1280&url=[URL]");
+	if (!(/robothumb/i).test(localStorage.getItem("thumbnailing_service"))) {
+		localStorage.setItem("thumbnailing_service", "http://www.robothumb.com/src/?size=640x480&url=[URL]");
 	}
 }
 
