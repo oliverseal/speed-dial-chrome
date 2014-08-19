@@ -61,6 +61,7 @@ function createDefaults() {
 		dial_width: "70",
 		drag_and_drop: "true",
 		enable_sync: "false",
+		entry_images: "{}",
 		folder_color: "#888888",
 		show_advanced: "false",
 		show_folder_list: "true",
@@ -76,6 +77,13 @@ function createDefaults() {
 			localStorage.setItem(name, default_values[name]);
 		}
 	});
+
+	// Global Settings object to grab & store confg settings only once
+	window.Settings = {
+		iconData: JSON.parse(localStorage.getItem("custom_icon_data")),
+		imageData: JSON.parse(localStorage.getItem("entry_images"))
+	};
+	
 
 	// TODO remove at some point, this will convert everyone to the new thumbnailing API
 	if (!(/robothumb/i).test(localStorage.getItem("thumbnailing_service"))) {

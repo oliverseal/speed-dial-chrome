@@ -116,6 +116,9 @@ td {
 	width: 10em;
 	height: 2em;
 	font-size: 110%;
+	margin-left: 2.2em;
+	position: relative;
+	left: 2.5em;
 }
 
 #options {

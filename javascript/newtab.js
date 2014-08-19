@@ -31,7 +31,7 @@ function addSpeedDialBookmark(bookmark, entryArray) {
 	});
 
 	// If custom icon URL has been set and exists, evaluates to true to center the custom icon
-	if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
+	if (Settings.iconData[bookmark.url]) {
 		entry.find(".image").addClass("custom-icon");
 	}
 
@@ -74,21 +74,28 @@ function setDialStyles() {
 	var borderWidth = 14;
 	var minEntryWidth = 120 - borderWidth;
 	var entryWidth = (adjustedDialWidth / dialColumns) - borderWidth;
+	var entryRatio = 10/16;
 
 	if (entryWidth < minEntryWidth) {
 		entryWidth = minEntryWidth;
 	}
 
 	// Set the values through CSS, rather than explicit individual CSS styles
-	// Height values are 3/4 or * 0.75 width values
 	$("#styles").html(
 		"#dial { width:" + (adjustedDialWidth | 0) + "px; } " +
-		".entry { height:" + (entryWidth * 0.75 | 0) + "px; width:" + (entryWidth | 0) + "px; } " +
+		".entry { height:" + (entryWidth * entryRatio | 0) + "px; width:" + (entryWidth | 0) + "px; } " +
 		"td.title { max-width:" + (entryWidth - 50 | 0) + "px; } " +
-		".image { height:" + ((entryWidth * 0.75) - 20 | 0) + "px; } " +
-		".foundicon-folder { font-size:" + (entryWidth * 0.5 | 0) + "px; top:" + (entryWidth * 0.05 | 0) + "px; color:" + folderColor + " } " +
-		".foundicon-plus { font-size:" + (entryWidth * 0.3 | 0) + "px; top:" + (entryWidth * 0.18 | 0) + "px; } "
+		".image { height:" + ((entryWidth * entryRatio) - 20 | 0) + "px; } " +
+		".foundicon-folder { font-size:" + (entryWidth * 0.4 | 0) + "px; top:" + (entryWidth * 0.03 | 0) + "px; color:" + folderColor + " } " +
+		".foundicon-plus { font-size:" + (entryWidth * 0.28 | 0) + "px; top:" + (entryWidth * 0.14 | 0) + "px; } "
 	);
+}
+
+function checkEntryImage(url) {
+	if (Settings.imageData[btoa(url)] === undefined) {
+		Settings.imageData[btoa(url)] = { "data": "", "refresh": true };
+		localStorage.setItem("entry_images", JSON.stringify(Settings.imageData));
+	}
 }
 
 // Retrieve the bookmarks bar node and use it to generate speed dials
@@ -100,6 +107,7 @@ function createSpeedDial(folderId) {
 		var entryArray = [];
 		(node[0].children).forEach(function(bookmark) {
 			if (bookmark.url !== undefined) {
+				checkEntryImage(bookmark.url);
 				addSpeedDialBookmark(bookmark, entryArray);
 			}
 			if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
@@ -132,10 +140,13 @@ function createSpeedDial(folderId) {
 }
 
 function getThumbnailUrl(bookmark) {
-	if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
-		return JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url];
+	if (Settings.iconData[bookmark.url]) {
+		return Settings.iconData[bookmark.url];
+	} else if (Settings.imageData[btoa(bookmark.url)] && Settings.imageData[btoa(bookmark.url)].data.length !== 0) {
+		return Settings.imageData[btoa(bookmark.url)].data;
+	} else {
+		return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
 	}
-	return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
 }
 
 function showBookmarkEntryForm(heading, title, url, target) {
@@ -145,7 +156,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find(".title").prop("value", title);
 	// Must || "" .url and .icon fields when using .prop() to clear previously set input values
 	form.find(".url").prop("value", url || "");
-	form.find(".icon").prop("value", JSON.parse(localStorage.getItem("custom_icon_data"))[url] || "");
+	form.find(".icon").prop("value", Settings.iconData[url] || "");
 	form.prop("target", target);
 
 	// Selectors to hide URL & custom icon fields when editing a folder name
@@ -166,7 +177,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 }
 
 function updateCustomIcon(url, old_url) {
-	var icon_object = JSON.parse(localStorage.getItem("custom_icon_data"));
+	var icon_object = Settings.iconData;
 	var icon_url = $("#bookmark_form .icon").prop("value").trim();
 
 	icon_object[url] = icon_url;
@@ -208,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
-	$("#bookmark_form button").on("click", function() {
+	$(".save").on("click", function() {
 		var target = $("#bookmark_form").prop("target");
 		var title = $("#bookmark_form .title").prop("value").trim();
 		var url = $("#bookmark_form .url").prop("value").trim();
@@ -217,6 +228,16 @@ document.addEventListener("DOMContentLoaded", function() {
 			addBookmark(title, url);
 		} else {
 			updateBookmark(target, title, url);
+		}
+	});
+	
+	$(".refresh").on("click", function() {
+		if (document.activeElement.type !== "text") {
+			var target = $("#bookmark_form").prop("target");
+			var url = $("#bookmark_form .url").prop("value").trim();
+			Settings.imageData[btoa(url)].refresh = true;
+			localStorage.setItem("entry_images", JSON.stringify(Settings.imageData));
+			window.location = url;
 		}
 	});
 
