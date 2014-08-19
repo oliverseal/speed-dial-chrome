@@ -62,7 +62,6 @@ function createDefaults() {
 		drag_and_drop: "true",
 		enable_sync: "false",
 		folder_color: "#888888",
-		force_http: "true",
 		show_advanced: "false",
 		show_folder_list: "true",
 		show_new_entry: "true",

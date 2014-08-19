@@ -135,9 +135,6 @@ function getThumbnailUrl(bookmark) {
 	if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
 		return JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url];
 	}
-	if (localStorage.getItem("force_http") === "true") {
-		bookmark.url = bookmark.url.replace("https", "http");
-	}
 	return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
 }
 
