@@ -2,7 +2,7 @@
 	"chrome_url_overrides": {
 		"newtab": "newtab.html"
 	},
-	"description": "A speed dial functionally similar to the one used in Opera.",
+	"description": "A speed dial functionally similar to the one used in Vivaldi.",
 	"icons": {
 		"128": "icons/icon128.png",
 		"48": "icons/icon48.png",
@@ -11,7 +11,7 @@
 	"manifest_version": 2,
 	"name": "Simple Speed Dial",
 	"options_page": "options.html",
-	"permissions": ["background", "bookmarks", "storage", "tabs", "<all_urls>"],
+	"permissions": ["background", "bookmarks", "storage", "tabs"],
 	"background": {
 		"scripts": ["javascript/eventPage.js"],
 		"persistent": false

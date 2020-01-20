@@ -89,25 +89,34 @@ function setDialStyles() {
 		".foundicon-folder { font-size:" + (entryWidth * 0.4 | 0) + "px; top:" + (entryWidth * 0.03 | 0) + "px; color:" + folderColor + " } " +
 		".foundicon-plus { font-size:" + (entryWidth * 0.28 | 0) + "px; top:" + (entryWidth * 0.14 | 0) + "px; } "
 	);
+  return {
+    entryWidth: entryWidth,
+    entryHeight: (entryWidth * entryRatio) - 20,
+    entryRatio: entryRatio,
+  }
 }
 
-function checkEntryImage(url) {
+function checkEntryImage(url, dimensions) {
 	if (Settings.imageData[btoa(url)] === undefined) {
-		Settings.imageData[btoa(url)] = { "data": "", "refresh": true };
+    Settings.imageData[btoa(url)] = {
+      data: "",
+      updated: 0,
+      dimensions,
+    };
 		localStorage.setItem("entry_images", JSON.stringify(Settings.imageData));
 	}
 }
 
 // Retrieve the bookmarks bar node and use it to generate speed dials
 function createSpeedDial(folderId) {
-	setDialStyles();
+	const dimensions = setDialStyles();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		// Loop over bookmarks in folder and add to the dial
 		var entryArray = [];
 		(node[0].children).forEach(function(bookmark) {
 			if (bookmark.url !== undefined) {
-				checkEntryImage(bookmark.url);
+				checkEntryImage(bookmark.url, dimensions);
 				addSpeedDialBookmark(bookmark, entryArray);
 			}
 			if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
@@ -145,7 +154,7 @@ function getThumbnailUrl(bookmark) {
 	} else if (Settings.imageData[btoa(bookmark.url)] && Settings.imageData[btoa(bookmark.url)].data.length !== 0) {
 		return Settings.imageData[btoa(bookmark.url)].data;
 	} else {
-		return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
+    return 'images/nopreviewavailable.png';
 	}
 }
 
@@ -235,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (document.activeElement.type !== "text") {
 			var target = $("#bookmark_form").prop("target");
 			var url = $("#bookmark_form .url").prop("value").trim();
-			Settings.imageData[btoa(url)].refresh = true;
+			Settings.imageData[btoa(url)].updated = 0;
 			localStorage.setItem("entry_images", JSON.stringify(Settings.imageData));
 			window.location = url;
 		}

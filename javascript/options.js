@@ -14,7 +14,7 @@ function restoreOptions() {
 	$("#show_new_entry").prop("checked", localStorage.getItem("show_new_entry") === "true");
 	$("#show_options_gear").prop("checked", localStorage.getItem("show_options_gear") === "true");
 	$("#show_subfolder_icons").prop("checked", localStorage.getItem("show_subfolder_icons") === "true");
-	$("#thumbnailing_service").prop("value", localStorage.getItem("thumbnailing_service"));
+	$("#preview_refresh_rate").prop("value", localStorage.getItem("preview_refresh_rate"));
 }
 
 // Write selected options back to local storage
@@ -33,7 +33,7 @@ function saveOptions() {
 	localStorage.setItem("show_new_entry", $("#show_new_entry").prop("checked"));
 	localStorage.setItem("show_options_gear", $("#show_options_gear").prop("checked"));
 	localStorage.setItem("show_subfolder_icons", $("#show_subfolder_icons").prop("checked"));
-	localStorage.setItem("thumbnailing_service", $("#thumbnailing_service").prop("value"));
+	localStorage.setItem("preview_refresh_rate", $("#preview_refresh_rate").prop("value") || 86400);
 
 	if (localStorage.getItem("enable_sync") === "true") {
 		syncToStorage();

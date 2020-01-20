@@ -68,7 +68,8 @@ function createDefaults() {
 		show_new_entry: "true",
 		show_options_gear: "true",
 		show_subfolder_icons: "true",
-		thumbnailing_service: "http://www.robothumb.com/src/?size=640x480&url=[URL]"
+		thumbnailing_service: "http://www.robothumb.com/src/?size=640x480&url=[URL]",
+    preview_refresh_rate: "86400",
 	};
 
 	// Creates default localStorage values if they don't already exist
@@ -83,12 +84,6 @@ function createDefaults() {
 		iconData: JSON.parse(localStorage.getItem("custom_icon_data")),
 		imageData: JSON.parse(localStorage.getItem("entry_images"))
 	};
-	
-
-	// TODO remove at some point, this will convert everyone to the new thumbnailing API
-	if (!(/robothumb/i).test(localStorage.getItem("thumbnailing_service"))) {
-		localStorage.setItem("thumbnailing_service", "http://www.robothumb.com/src/?size=640x480&url=[URL]");
-	}
 }
 
 // Initialisation routines for all pages

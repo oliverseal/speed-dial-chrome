@@ -6,6 +6,12 @@ A speed dial functionally similar to the one used in Opera.
 [Chrome Extension](https://chrome.google.com/webstore/detail/simple-speed-dial/gpdpldlbafdmhlmcdllcjgoigmpjonfc/details)
 [GitHub Repository](https://github.com/j3nda/speed-dial-chrome)
 
+### A note on latest additions.
+
+I'll (oliverseal) be rebuilding this plugin from scratch soon. This was borrowed to have a basis to experiment with.
+My preferred speed dial is that of Vivaldi's. After one too many crashes, a slow system, and borderline useless dev tools
+in Vivaldi, I've returned to Chrome. This is a quick fix to get back to being productive.
+
 
 Features
 --------------
@@ -23,6 +29,7 @@ This implementation is more limited than Opera's. Opera generates thumbnail inte
 
 Release Notes
 --------------
+- 3.0.0: Switch to generating thumbnails based on visiting the bookmark.
 - 2.5.0: Update of thumbnail generation service and other minor enhancements
 - 2.4.6: Added vertical centering option
 - 2.4.5: General code maintenance
@@ -51,3 +58,4 @@ Contributors
 - Jan Smid (J3nda)
 - Asher Glick (AsherGlick)
 - Eric (heavensrevenge)
+- Oliver Garwil (oliverseal)
